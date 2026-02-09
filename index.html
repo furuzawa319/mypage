@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>研究テーマ</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #fdfdfc;
+        --bg-ink: rgba(0, 0, 0, 0.035);
+        --card-bg: #ffffff;
+        --text: #111111;
+        --muted: #5a5a5a;
+        --border: #d9d9d9;
+        --shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        --accent: #1a3d6e;
+        --tree-ink: rgba(0, 0, 0, 0.08);
+        --tree-line: rgba(0, 0, 0, 0.08);
+        --tree-opacity: 0.18;
+        --wordmark: rgba(0, 0, 0, 0.03);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background:
+          linear-gradient(120deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0)),
+          repeating-linear-gradient(
+            90deg,
+            transparent 0 24px,
+            var(--bg-ink) 24px 25px
+          ),
+          repeating-linear-gradient(
+            0deg,
+            transparent 0 24px,
+            var(--bg-ink) 24px 25px
+          ),
+          var(--bg);
+        color: var(--text);
+        font-family: "Latin Modern Roman", "CMU Serif", "Computer Modern Serif", "Times New Roman", "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+        line-height: 1.7;
+      }
+
+      body::before {
+        content: "XP CP TP vP DP NegP Spec Head Adjunct Merge Move Agree";
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-size: clamp(16px, 3vw, 22px);
+        letter-spacing: 0.35em;
+        color: var(--wordmark);
+        pointer-events: none;
+        transform: rotate(-12deg);
+        user-select: none;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cstyle%3Etext%7Bfont-family:Arial, sans-serif;font-size:18px;fill:rgba(20,20,20,0.08);%7Dline%7Bstroke:rgba(20,20,20,0.08);stroke-width:1;%7D%3C/style%3E%3Cline x1='400' y1='60' x2='200' y2='140'/%3E%3Cline x1='400' y1='60' x2='600' y2='140'/%3E%3Cline x1='200' y1='140' x2='120' y2='220'/%3E%3Cline x1='200' y1='140' x2='280' y2='220'/%3E%3Cline x1='600' y1='140' x2='520' y2='220'/%3E%3Cline x1='600' y1='140' x2='680' y2='220'/%3E%3Ctext x='392' y='52'%3ECP%3C/text%3E%3Ctext x='180' y='132'%3ETP%3C/text%3E%3Ctext x='580' y='132'%3EvP%3C/text%3E%3Ctext x='96' y='212'%3EDP%3C/text%3E%3Ctext x='258' y='212'%3ET%3C/text%3E%3Ctext x='498' y='212'%3Ev%3C/text%3E%3Ctext x='658' y='212'%3EVP%3C/text%3E%3C/svg%3E");
+        background-repeat: repeat;
+        background-size: 520px 380px;
+        opacity: var(--tree-opacity);
+        pointer-events: none;
+        transform: rotate(-6deg) scale(1.05);
+      }
+
+      .card {
+        width: min(680px, 92vw);
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 30px 34px 34px;
+        box-shadow: var(--shadow);
+      }
+
+      .title {
+        margin: 0 0 12px;
+        font-size: 22px;
+        letter-spacing: 0.08em;
+        text-align: center;
+      }
+
+      .toolbar {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+
+      .lang-toggle {
+        appearance: none;
+        border: none;
+        background: transparent;
+        color: var(--accent);
+        padding: 0;
+        border-radius: 0;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        cursor: pointer;
+      }
+
+      .lang-toggle:hover {
+        text-decoration: underline;
+      }
+
+      .theme-toggle {
+        appearance: none;
+        border: none;
+        background: transparent;
+        color: var(--accent);
+        padding: 0;
+        border-radius: 0;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        cursor: pointer;
+      }
+
+      .theme-toggle:hover {
+        text-decoration: underline;
+      }
+
+      .subtitle {
+        margin: 0 0 20px;
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .list {
+        margin: 0;
+        border-top: 1px solid var(--border);
+      }
+
+      .label {
+        margin: 0;
+        font-size: 13px;
+        color: var(--muted);
+        letter-spacing: 0.06em;
+      }
+
+      .en {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        letter-spacing: 0.06em;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 12px;
+        padding: 14px 4px;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .value {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.8;
+        color: var(--text);
+        word-break: break-word;
+      }
+
+      details {
+        border-bottom: 1px solid var(--border);
+      }
+
+      summary {
+        list-style: none;
+        cursor: pointer;
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 12px;
+        padding: 14px 4px;
+        align-items: center;
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .preview {
+        margin: 0;
+        font-size: 16px;
+        color: var(--text);
+        word-break: break-word;
+      }
+
+      .value.detail {
+        margin: 0 0 14px 0;
+        padding: 0 4px 0 136px;
+      }
+
+      details[open] summary {
+        background: rgba(0, 0, 0, 0.015);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+          --bg: #0d0f12;
+          --bg-ink: rgba(255, 255, 255, 0.04);
+          --card-bg: #14171c;
+          --text: #f2f2f2;
+          --muted: #b4b4b4;
+          --border: #2a2f36;
+          --shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+          --accent: #8fb4ff;
+          --tree-ink: rgba(255, 255, 255, 0.09);
+          --tree-line: rgba(255, 255, 255, 0.09);
+          --tree-opacity: 0.22;
+          --wordmark: rgba(255, 255, 255, 0.04);
+        }
+
+        body {
+          background:
+            linear-gradient(120deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0)),
+            repeating-linear-gradient(
+              90deg,
+              transparent 0 24px,
+              var(--bg-ink) 24px 25px
+            ),
+            repeating-linear-gradient(
+              0deg,
+              transparent 0 24px,
+              var(--bg-ink) 24px 25px
+            ),
+            var(--bg);
+        }
+
+        body::after {
+          filter: invert(1);
+        }
+      }
+
+      [data-theme="light"] {
+        color-scheme: light;
+        --bg: #fdfdfc;
+        --bg-ink: rgba(0, 0, 0, 0.035);
+        --card-bg: #ffffff;
+        --text: #111111;
+        --muted: #5a5a5a;
+        --border: #d9d9d9;
+        --shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        --accent: #1a3d6e;
+        --tree-ink: rgba(0, 0, 0, 0.08);
+        --tree-line: rgba(0, 0, 0, 0.08);
+        --tree-opacity: 0.18;
+        --wordmark: rgba(0, 0, 0, 0.03);
+      }
+
+      [data-theme="light"] body {
+        background:
+          linear-gradient(120deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0)),
+          repeating-linear-gradient(
+            90deg,
+            transparent 0 24px,
+            var(--bg-ink) 24px 25px
+          ),
+          repeating-linear-gradient(
+            0deg,
+            transparent 0 24px,
+            var(--bg-ink) 24px 25px
+          ),
+          var(--bg);
+      }
+
+      [data-theme="light"] body::after {
+        filter: none;
+      }
+
+      [data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #0d0f12;
+        --bg-ink: rgba(255, 255, 255, 0.04);
+        --card-bg: #14171c;
+        --text: #f2f2f2;
+        --muted: #b4b4b4;
+        --border: #2a2f36;
+        --shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+        --accent: #8fb4ff;
+        --tree-ink: rgba(255, 255, 255, 0.09);
+        --tree-line: rgba(255, 255, 255, 0.09);
+        --tree-opacity: 0.22;
+        --wordmark: rgba(255, 255, 255, 0.04);
+      }
+
+      [data-theme="dark"] body {
+        background:
+          linear-gradient(120deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0)),
+          repeating-linear-gradient(
+            90deg,
+            transparent 0 24px,
+            var(--bg-ink) 24px 25px
+          ),
+          repeating-linear-gradient(
+            0deg,
+            transparent 0 24px,
+            var(--bg-ink) 24px 25px
+          ),
+          var(--bg);
+      }
+
+      [data-theme="dark"] body::after {
+        filter: invert(1);
+      }
+
+      a {
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+      }
+
+      a:hover {
+        border-bottom-color: currentColor;
+      }
+
+      [data-lang="ja"] [data-ja],
+      [data-lang="en"] [data-en] {
+        display: inline;
+      }
+
+      [data-lang="ja"] [data-en],
+      [data-lang="en"] [data-ja] {
+        display: none;
+      }
+
+      @media (max-width: 720px) {
+        .card {
+          padding: 22px 20px 26px;
+        }
+
+        .title {
+          font-size: 20px;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .row,
+        summary {
+          grid-template-columns: 1fr;
+          gap: 6px;
+        }
+
+        .label {
+          font-size: 12px;
+        }
+
+        .value {
+          font-size: 15px;
+        }
+
+        .en {
+          font-size: 11px;
+        }
+
+        .value.detail {
+          padding-left: 4px;
+        }
+      }
+    </style>
+  </head>
+  <body data-lang="en">
+    <main class="card" aria-labelledby="title">
+      <div class="toolbar">
+        <button class="theme-toggle" type="button" id="theme-toggle">Dark</button>
+        <button class="lang-toggle" type="button" id="lang-toggle">日本語</button>
+      </div>
+      <h1 id="title" class="title">
+        <span data-en>Self Introduction</span>
+        <span data-ja>自己紹介</span>
+      </h1>
+      <div class="list" role="list">
+        <section class="row" role="listitem">
+          <h2 class="label">
+            <span data-en>Name</span>
+            <span data-ja>名前</span>
+          </h2>
+          <p class="value">
+            <span data-en>Sotaro Furuzawa</span>
+            <span data-ja>古澤壮太郎</span>
+          </p>
+        </section>
+        <details role="listitem" open>
+          <summary>
+            <h2 class="label">
+              <span data-en>Research Topic</span>
+              <span data-ja>研究テーマ</span>
+            </h2>
+            <p class="preview">
+              <span data-en>Negative Concord Constructions</span>
+              <span data-ja>否定呼応構文</span>
+            </p>
+          </summary>
+          <p class="value detail">
+            <span data-en>
+              I examine diachronic change (Old–Middle–Modern English) and synchronic distribution,
+              using historical corpora to analyze factors behind syntactic properties such as (non-)inversion.
+            </span>
+            <span data-ja>
+              否定呼応構文の通時的変化（古英語〜中英語〜近代英語）と共時的分布を調査し、
+              史料コーパスを用いて否定倒置の有無など構文的特性の要因を分析する。
+            </span>
+          </p>
+        </details>
+        <section class="row" role="listitem">
+          <h2 class="label">
+            <span data-en>Date of Birth</span>
+            <span data-ja>誕生日</span>
+          </h2>
+          <p class="value">
+            <span data-en>March 19, 2002</span>
+            <span data-ja>2002年3月19日</span>
+          </p>
+        </section>
+        <section class="row" role="listitem">
+          <h2 class="label">
+            <span data-en>Email</span>
+            <span data-ja>メールアドレス</span>
+          </h2>
+          <p class="value">furuzawa.sotaro.t0@s.mail.nagoya-u.ac.jp</p>
+        </section>
+        <section class="row" role="listitem">
+          <h2 class="label">
+            <span data-en>Program</span>
+            <span data-ja>課程</span>
+          </h2>
+          <p class="value">
+            <span data-en>Master’s Program, Year 1</span>
+            <span data-ja>博士前期課程 1年</span>
+          </p>
+        </section>
+        <section class="row" role="listitem">
+          <h2 class="label">
+            <span data-en>Affiliation</span>
+            <span data-ja>所属</span>
+          </h2>
+          <p class="value">
+            <span data-en>Department of English Linguistics, Graduate School of Humanities, Nagoya University</span>
+            <span data-ja>名古屋大学人文学研究科 英語学研究室</span>
+          </p>
+        </section>
+        <details role="listitem">
+          <summary>
+            <h2 class="label">
+              <span data-en>Theoretical Framework</span>
+              <span data-ja>理論的枠組み</span>
+            </h2>
+            <p class="preview">
+              <span data-en>Generative Grammar (Minimalist Program)</span>
+              <span data-ja>生成文法理論（ミニマリストプログラム）</span>
+            </p>
+          </summary>
+          <p class="value detail">
+            <span data-en>
+              I adopt the Minimalist Program within Generative Grammar,
+              explaining syntactic derivations with minimal principles.
+            </span>
+            <span data-ja>
+              生成文法理論の中でもミニマリストプログラムを採用し、
+              統語派生を最小限の原理で説明する枠組みに基づく。
+            </span>
+          </p>
+        </details>
+        <section class="row" role="listitem">
+          <h2 class="label">
+            <span data-en>Education</span>
+            <span data-ja>学歴</span>
+          </h2>
+          <p class="value">
+            <span data-en>
+              Apr 2020: B.A. in Letters, Nagoya University (enrolled) / Mar 2025: Graduated /
+              Apr 2025: Graduate School of Humanities, Nagoya University (enrolled)
+            </span>
+            <span data-ja>
+              2020年4月 名古屋大学 文学部 入学／2025年3月 卒業／2025年4月 名古屋大学人文学研究科 入学
+            </span>
+          </p>
+        </section>
+      </div>
+    </main>
+    <script>
+      const toggle = document.getElementById("lang-toggle");
+      const root = document.body;
+      const setLang = (lang) => {
+        root.setAttribute("data-lang", lang);
+        toggle.textContent = lang === "en" ? "日本語" : "English";
+      };
+      toggle.addEventListener("click", () => {
+        const next = root.getAttribute("data-lang") === "en" ? "ja" : "en";
+        setLang(next);
+      });
+      setLang("en");
+
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeRoot = document.documentElement;
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme === "dark" || storedTheme === "light") {
+        themeRoot.setAttribute("data-theme", storedTheme);
+      }
+      const updateThemeLabel = () => {
+        const current = themeRoot.getAttribute("data-theme");
+        themeToggle.textContent = current === "dark" ? "Light" : "Dark";
+      };
+      themeToggle.addEventListener("click", () => {
+        const current = themeRoot.getAttribute("data-theme");
+        const next = current === "dark" ? "light" : "dark";
+        themeRoot.setAttribute("data-theme", next);
+        localStorage.setItem("theme", next);
+        updateThemeLabel();
+      });
+      updateThemeLabel();
+    </script>
+  </body>
+</html>
